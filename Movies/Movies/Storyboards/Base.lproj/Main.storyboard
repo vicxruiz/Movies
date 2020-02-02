@@ -33,7 +33,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="tUR-j3-AU4" kind="show" id="fhO-RZ-45D"/>
+                                    <segue destination="tUR-j3-AU4" kind="show" identifier="MovieDetialSegue" id="fhO-RZ-45D"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -96,10 +96,10 @@
             </objects>
             <point key="canvasLocation" x="1220" y="628"/>
         </scene>
-        <!--Movie Details View Controller-->
+        <!--Movie Detail View Controller-->
         <scene sceneID="3u3-Lt-iAZ">
             <objects>
-                <viewController storyboardIdentifier="MovieDetail" id="tUR-j3-AU4" customClass="MovieDetailsViewController" customModule="Movies" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MovieDetail" id="tUR-j3-AU4" customClass="MovieDetailViewController" customModule="Movies" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HtW-9K-3yh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="970"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

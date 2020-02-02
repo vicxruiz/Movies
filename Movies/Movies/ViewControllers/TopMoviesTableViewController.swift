@@ -16,10 +16,10 @@ class TopMoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchMovies()
+        displayMovies()
     }
     
-    func fetchMovies() {
+    func displayMovies() {
         networkManager.fetchTopMovies { (movies, error) in
             if let error = error {
                 print(error)
@@ -32,7 +32,6 @@ class TopMoviesTableViewController: UITableViewController {
             }
         }
     }
-    
 }
 
 //MARK: Data Source
@@ -48,6 +47,25 @@ extension TopMoviesTableViewController {
         let movie = movies[indexPath.row]
         cell.textLabel?.text = movie.name
         return cell
+    }
+}
+
+//MARK: Segues
+
+extension TopMoviesTableViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "MovieDetialSegue" {
+            guard let destinationVC = segue.destination as? MovieDetailViewController else {
+                print("no destination")
+                return
+            }
+            guard let indexPath = tableView.indexPathForSelectedRow else {
+                print("no indexPath")
+                return
+            }
+            destinationVC.networkManager = networkManager
+            destinationVC.movie = movies[indexPath.row]
+        }
     }
 }
 

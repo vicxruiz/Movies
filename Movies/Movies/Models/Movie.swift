@@ -20,7 +20,7 @@ struct Movie: Codable {
     }
 }
 
-struct MovieDetails {
+struct MovieDetails: Codable {
     var duration: String
     var description: String
     var director: String

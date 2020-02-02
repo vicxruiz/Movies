@@ -20,7 +20,7 @@ class NetworkManager {
     
     enum Endpoints: String {
         case rank = "MoviesByRank"
-        case details = "MoviesDetails"
+        case details = "MovieDetails"
     }
     
     
@@ -67,5 +67,43 @@ class NetworkManager {
                 completion(nil, error)
             }
         }
+    }
+    
+    func fetchMovieDetails(_ movie: Movie, completion: @escaping ([MovieDetails]?,Error?) -> Void)  {
+        let movieDetailsURL = baseZocdocURL.appendingPathComponent("\(Endpoints.details.rawValue)")
+        var components = URLComponents(url: movieDetailsURL, resolvingAgainstBaseURL: true)
+        
+        let authTokenQueryItem = URLQueryItem(name: "authToken", value: zocdocAuthToken)
+        let movieIdsQueryItem = URLQueryItem(name: "movieIds", value: "\(movie.id)")
+        
+        components?.queryItems = [authTokenQueryItem, movieIdsQueryItem]
+        
+        guard let url = components?.url else {return}
+        print(url)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.get.rawValue
+        
+        dataGetter.fetchData(with: request) { (_, data, error) in
+
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            guard let data = data else {
+                print("no data")
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            do {
+                let data = try decoder.decode([MovieDetails].self, from: data)
+                completion(data, nil)
+            } catch {
+                print("error decoding data: \(error)")
+                completion(nil, error)
+            }
+        }
+        
     }
 }
