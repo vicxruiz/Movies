@@ -11,13 +11,17 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
     
+    @IBOutlet weak var posterImageView: UIImageView!
+    
     var networkManager: NetworkManager?
     var movie: Movie?
     var movieDetails: MovieDetails?
+    var movieDB: MovieDB?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         displayMovieDetails()
+        displayPoster()
     }
     
     func displayMovieDetails() {
@@ -31,6 +35,23 @@ class MovieDetailViewController: UIViewController {
                 self.movieDetails = movieDetailsResult[0]
                 DispatchQueue.main.async {
                     self.updateViews()
+                }
+            }
+        })
+    }
+    
+    func displayPoster() {
+        guard let movie = movie else {return}
+        networkManager?.fetchMovieFromMovieDB(movie, completion: { (movieDB, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            if let movieDB = movieDB {
+                if let path = movieDB.poster_path {
+                    DispatchQueue.main.async {
+                        self.posterImageView.imageFromServerURL("https://image.tmdb.org/t/p/w500/\(path)", placeHolder: UIImage(named: "noimage"))
+                    }
                 }
             }
         })

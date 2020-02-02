@@ -289,6 +289,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="dPw-Tb-3j5"/>
                     <size key="freeformSize" width="414" height="970"/>
+                    <connections>
+                        <outlet property="posterImageView" destination="DWx-4U-m9h" id="CkB-gX-DMR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9jM-ou-XWs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

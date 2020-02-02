@@ -21,12 +21,15 @@ class NetworkManager {
     enum Endpoints: String {
         case rank = "MoviesByRank"
         case details = "MovieDetails"
+        case search = "search/movie"
     }
     
     
     let dataGetter = DataGetter()
     let baseZocdocURL = URL(string: "https://interview.zocdoc.com/api/1/FEE/")!
+    let baseMovieDBURL = URL(string: "https://api.themoviedb.org/3/")!
     let zocdocAuthToken = "3b502b3f-b1ff-4128-bd99-626e74836d9c"
+    let movieDBAPIKey = "903fbcb91e61123c53dbcb97a317eded"
     let startIndex = 1
     let numMovies = 10
     
@@ -105,5 +108,49 @@ class NetworkManager {
             }
         }
         
+    }
+    
+    func fetchMovieFromMovieDB(_ movie: Movie, completion: @escaping (MovieDB?,Error?) -> Void) {
+        let movieDBURL = baseMovieDBURL.appendingPathComponent("\(Endpoints.search.rawValue)")
+        var components = URLComponents(url: movieDBURL, resolvingAgainstBaseURL: true)
+        var movieName = movie.name
+        let apiKeyQueryItem = URLQueryItem(name: "api_key", value: "\(movieDBAPIKey)")
+        if movie.name.contains("(") {
+            for _ in 1...7 {
+                movieName.removeLast()
+            }
+        }
+        let queryQueryItem = URLQueryItem(name: "query", value: "\(movieName)")
+        
+        components?.queryItems = [apiKeyQueryItem, queryQueryItem]
+               
+        guard let url = components?.url else {return}
+        print(url)
+               
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.get.rawValue
+        
+        dataGetter.fetchData(with: request) { (_, data, error) in
+
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            guard let data = data else {
+                print("no data")
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            do {
+                let data = try decoder.decode(MovieSearch.self, from: data)
+                let movieDB = data.results[0]
+                completion(movieDB, nil)
+            } catch {
+                print("error decoding data: \(error)")
+                completion(nil, error)
+            }
+        }
+
     }
 }
