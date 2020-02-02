@@ -13,12 +13,12 @@ struct MovieSearch: Codable {
 }
 
 struct MovieDB: Codable {
-    var poster: String
+    var posterPath: String
     var voteCount: Int
     var voteAverage: Int
     
     enum CodingKeys: String, CodingKey {
-        case poster = "poster_path"
+        case posterPath = "poster_path"
         case voteCount = "vote_count"
         case voteAverage = "vote_average"
     }
