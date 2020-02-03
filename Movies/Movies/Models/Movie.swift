@@ -26,6 +26,7 @@ struct MovieDetails: Codable {
     var director: String
     var id: Int
     var name: String
+    var actors: [String]
     
     enum CodingKeys: String, CodingKey {
         case id = "Id"
@@ -33,5 +34,6 @@ struct MovieDetails: Codable {
         case duration = "Duration"
         case description = "Description"
         case director = "Director"
+        case actors = "Actors"
     }
 }

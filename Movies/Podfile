@@ -8,10 +8,6 @@ target 'Movies' do
   # Pods for Movies
 
 pod 'Kingfisher'	
-pod 'Firebase/Core'
-pod 'Firebase/Auth'
-pod 'Firebase/Database'
-pod 'Firebase/Storage'
 pod 'JGProgressHUD'
 
   target 'MoviesTests' do

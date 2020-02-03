@@ -12,6 +12,12 @@ import UIKit
 class MovieDetailViewController: UIViewController {
     
     @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var directorLabel: UILabel!
+    @IBOutlet weak var lengthLabel: UILabel!
+    @IBOutlet weak var collecitonView: UICollectionView!
     
     var networkManager: NetworkManager?
     var movie: Movie?
@@ -20,6 +26,9 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        collecitonView.delegate = self
+        collecitonView.dataSource = self
+        setupNavigationBar()
         displayMovieDetails()
         displayPoster()
     }
@@ -35,6 +44,7 @@ class MovieDetailViewController: UIViewController {
                 self.movieDetails = movieDetailsResult[0]
                 DispatchQueue.main.async {
                     self.updateViews()
+                    self.collecitonView.reloadData()
                 }
             }
         })
@@ -48,10 +58,11 @@ class MovieDetailViewController: UIViewController {
                 return
             }
             if let movieDB = movieDB {
-                if let path = movieDB.poster_path {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    if let path = movieDB.posterPath {
                         self.posterImageView.imageFromServerURL("https://image.tmdb.org/t/p/w500/\(path)", placeHolder: UIImage(named: "noimage"))
                     }
+                    self.ratingLabel.text = "\(movieDB.voteAverage)"
                 }
             }
         })
@@ -59,8 +70,41 @@ class MovieDetailViewController: UIViewController {
     
     func updateViews() {
         if let movieDetails = movieDetails {
-            title = movieDetails.name
+            titleLabel.text = movieDetails.name
+            titleLabel.isHidden = false
+            descriptionLabel.text = movieDetails.description
+            lengthLabel.text = movieDetails.duration
+            lengthLabel.isHidden = false
+            directorLabel.text = movieDetails.director
         }
     }
     
+    func setupNavigationBar(){
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        self.navigationItem.backBarButtonItem?.title = ""
+        self.navigationController?.navigationBar.tintColor = .white
+    }
+    
+}
+
+extension MovieDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movieDetails?.actors.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NameCell", for: indexPath) as? ActorsCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        if let movieDetails = movieDetails {
+            let actor = movieDetails.actors[indexPath.row]
+            cell.actorName = actor
+        }
+        
+        return cell
+    }
 }
