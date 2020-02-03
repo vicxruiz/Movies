@@ -28,7 +28,10 @@ class TopMoviesTableViewController: UITableViewController {
     func displayMovies() {
         networkManager.fetchTopMovies { (movies, error) in
             if let error = error {
-                print(error)
+                DispatchQueue.main.async {
+                    Service.showAlert(on: self, style: .alert, title: "Error fetching top movies", message: error.localizedDescription)
+                }
+                return
             }
             if let movies = movies {
                 self.movies = movies

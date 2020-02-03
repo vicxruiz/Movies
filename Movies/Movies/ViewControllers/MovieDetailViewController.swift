@@ -11,7 +11,7 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
     
-    //MAKR: - Outlets
+    //MARK: - Outlets
     
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -46,7 +46,9 @@ class MovieDetailViewController: UIViewController {
         guard let movie = movie, let networkManager = networkManager else {return}
         networkManager.fetchMovieDetails(movie, completion: { (movieDetailsResult, error) in
             if let error = error  {
-                print(error)
+                DispatchQueue.main.async {
+                    Service.showAlert(on: self, style: .alert, title: "Error fetching movie details", message: error.localizedDescription)
+                }
                 return
             }
             if let movieDetailsResult = movieDetailsResult {
@@ -63,7 +65,9 @@ class MovieDetailViewController: UIViewController {
         guard let movie = movie, let networkManager = networkManager else {return}
         networkManager.fetchMovieFromMovieDB(movie, completion: { (movieDB, error) in
             if let error = error {
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    Service.showAlert(on: self, style: .alert, title: "Error displaying poster", message: error.localizedDescription)
+                }
                 return
             }
             if let movieDB = movieDB {
