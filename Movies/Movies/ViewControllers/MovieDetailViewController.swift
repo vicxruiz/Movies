@@ -97,6 +97,10 @@ class MovieDetailViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .white
     }
     
+    @IBAction func buyTicketsButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "BuySegue", sender: self)
+    }
+    
 }
 
 //MARK: - Data Source
