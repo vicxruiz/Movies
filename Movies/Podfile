@@ -8,7 +8,6 @@ target 'Movies' do
   # Pods for Movies
 
 pod 'Kingfisher'	
-pod 'JGProgressHUD'
 
   target 'MoviesTests' do
     inherit! :search_paths
