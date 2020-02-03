@@ -11,6 +11,8 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
     
+    //MAKR: - Outlets
+    
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -19,10 +21,15 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var lengthLabel: UILabel!
     @IBOutlet weak var collecitonView: UICollectionView!
     
+    
+    //MARK: - Properties
+    
     var networkManager: NetworkManager?
     var movie: Movie?
     var movieDetails: MovieDetails?
     var movieDB: MovieDB?
+    
+    //MARK: View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +40,11 @@ class MovieDetailViewController: UIViewController {
         displayPoster()
     }
     
+    //MARK: - Helper functions
+    
     func displayMovieDetails() {
-        guard let movie = movie else {return}
-        networkManager?.fetchMovieDetails(movie, completion: { (movieDetailsResult, error) in
+        guard let movie = movie, let networkManager = networkManager else {return}
+        networkManager.fetchMovieDetails(movie, completion: { (movieDetailsResult, error) in
             if let error = error  {
                 print(error)
                 return
@@ -51,8 +60,8 @@ class MovieDetailViewController: UIViewController {
     }
     
     func displayPoster() {
-        guard let movie = movie else {return}
-        networkManager?.fetchMovieFromMovieDB(movie, completion: { (movieDB, error) in
+        guard let movie = movie, let networkManager = networkManager else {return}
+        networkManager.fetchMovieFromMovieDB(movie, completion: { (movieDB, error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -89,6 +98,8 @@ class MovieDetailViewController: UIViewController {
     }
     
 }
+
+//MARK: - Data Source
 
 extension MovieDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

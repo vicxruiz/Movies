@@ -11,13 +11,19 @@ import UIKit
 
 class TopMoviesTableViewController: UITableViewController {
     
+    //MARK: Properties
+    
     var movies: [Movie] = []
     let networkManager = NetworkManager()
+    
+    //MARK: View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         displayMovies()
     }
+    
+    //MARK: Helper Functions
     
     func displayMovies() {
         networkManager.fetchTopMovies { (movies, error) in
