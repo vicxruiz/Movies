@@ -113,15 +113,9 @@ class NetworkManager {
     func fetchMovieFromMovieDB(_ movie: Movie, completion: @escaping (MovieDB?,Error?) -> Void) {
         let movieDBURL = baseMovieDBURL.appendingPathComponent("\(Endpoints.search.rawValue)")
         var components = URLComponents(url: movieDBURL, resolvingAgainstBaseURL: true)
-        var movieName = movie.name
         let apiKeyQueryItem = URLQueryItem(name: "api_key", value: "\(movieDBAPIKey)")
-        if movie.name.contains("(") {
-            for _ in 1...7 {
-                movieName.removeLast()
-            }
-        }
+        let movieName = cleanUpMovieTitle(movie: movie)
         let queryQueryItem = URLQueryItem(name: "query", value: "\(movieName)")
-        
         components?.queryItems = [apiKeyQueryItem, queryQueryItem]
                
         guard let url = components?.url else {return}
@@ -152,5 +146,17 @@ class NetworkManager {
             }
         }
 
+    }
+}
+
+extension NetworkManager {
+    func cleanUpMovieTitle(movie: Movie) -> String {
+        var movieName = movie.name
+        if movie.name.contains("(") {
+            for _ in 1...7 {
+                movieName.removeLast()
+            }
+        }
+        return movieName
     }
 }
