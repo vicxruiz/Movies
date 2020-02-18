@@ -19,7 +19,7 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var directorLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
-    @IBOutlet weak var collecitonView: UICollectionView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     //MARK: - Properties
@@ -33,8 +33,8 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collecitonView.delegate = self
-        collecitonView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
         setupNavigationBar()
         displayMovieDetails()
         displayPoster()
@@ -55,7 +55,7 @@ class MovieDetailViewController: UIViewController {
                 self.movieDetails = movieDetailsResult[0]
                 DispatchQueue.main.async {
                     self.updateViews()
-                    self.collecitonView.reloadData()
+                    self.collectionView.reloadData()
                 }
             }
         })

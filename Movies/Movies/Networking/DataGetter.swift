@@ -37,6 +37,6 @@ class DataGetter {
                 return
             }
             completion(requestID, data, nil)
-            }.resume()
+        }.resume()
     }
 }
