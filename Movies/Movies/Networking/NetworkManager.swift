@@ -24,6 +24,15 @@ class NetworkManager {
         case search = "search/movie"
     }
     
+    enum QueryItems: String {
+        case authToken = "authToken"
+        case startRankIndex = "startRankIndex"
+        case numMovies = "numMovies"
+        case movieIds = "movieIds"
+        case zocDocApiKey = "api_key"
+        case query = "query"
+    }
+    
     
     let dataGetter = DataGetter()
     let baseZocdocURL = URL(string: "https://interview.zocdoc.com/api/1/FEE/")!
@@ -38,9 +47,9 @@ class NetworkManager {
         let MoviesByRankURL = baseZocdocURL.appendingPathComponent("\(Endpoints.rank.rawValue)")
         var components = URLComponents(url: MoviesByRankURL, resolvingAgainstBaseURL: true)
         
-        let authTokenQueryItem = URLQueryItem(name: "authToken", value: zocdocAuthToken)
-        let startIndexRankQueryItem = URLQueryItem(name: "startRankIndex", value: "\(startIndex)")
-        let numMoviesQueryItem = URLQueryItem(name: "numMovies", value: "\(numMovies)")
+        let authTokenQueryItem = URLQueryItem(name: QueryItems.authToken.rawValue, value: zocdocAuthToken)
+        let startIndexRankQueryItem = URLQueryItem(name: QueryItems.startRankIndex.rawValue, value: "\(startIndex)")
+        let numMoviesQueryItem = URLQueryItem(name: QueryItems.numMovies.rawValue, value: "\(numMovies)")
         
         components?.queryItems = [authTokenQueryItem, startIndexRankQueryItem, numMoviesQueryItem]
         
@@ -76,8 +85,8 @@ class NetworkManager {
         let movieDetailsURL = baseZocdocURL.appendingPathComponent("\(Endpoints.details.rawValue)")
         var components = URLComponents(url: movieDetailsURL, resolvingAgainstBaseURL: true)
         
-        let authTokenQueryItem = URLQueryItem(name: "authToken", value: zocdocAuthToken)
-        let movieIdsQueryItem = URLQueryItem(name: "movieIds", value: "\(movie.id)")
+        let authTokenQueryItem = URLQueryItem(name: QueryItems.authToken.rawValue, value: zocdocAuthToken)
+        let movieIdsQueryItem = URLQueryItem(name: QueryItems.movieIds.rawValue, value: "\(movie.id)")
         
         components?.queryItems = [authTokenQueryItem, movieIdsQueryItem]
         
@@ -113,9 +122,9 @@ class NetworkManager {
     func fetchMovieFromMovieDB(_ movie: Movie, completion: @escaping (MovieDB?,Error?) -> Void) {
         let movieDBURL = baseMovieDBURL.appendingPathComponent("\(Endpoints.search.rawValue)")
         var components = URLComponents(url: movieDBURL, resolvingAgainstBaseURL: true)
-        let apiKeyQueryItem = URLQueryItem(name: "api_key", value: "\(movieDBAPIKey)")
+        let apiKeyQueryItem = URLQueryItem(name: QueryItems.zocDocApiKey.rawValue, value: "\(movieDBAPIKey)")
         let movieName = cleanUpMovieTitle(movie: movie)
-        let queryQueryItem = URLQueryItem(name: "query", value: "\(movieName)")
+        let queryQueryItem = URLQueryItem(name: QueryItems.query.rawValue, value: "\(movieName)")
         components?.queryItems = [apiKeyQueryItem, queryQueryItem]
                
         guard let url = components?.url else {return}
