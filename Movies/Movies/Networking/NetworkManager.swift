@@ -147,8 +147,13 @@ class NetworkManager {
             let decoder = JSONDecoder()
             do {
                 let data = try decoder.decode(MovieSearch.self, from: data)
-                let movieDB = data.results[0]
-                completion(movieDB, nil)
+                if data.results.count > 0 {
+                    let movieDB = data.results[0]
+                    completion(movieDB, nil)
+                } else {
+                    completion(nil, nil)
+                }
+                
             } catch {
                 print("error decoding data: \(error)")
                 completion(nil, error)
