@@ -23,9 +23,10 @@ class BuyTicketsViewController: UIViewController, WKUIDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let myURL = URL(string: "https://www.zocdoc.com")
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        if let myURL = URL(string: "https://www.zocdoc.com") {
+            let myRequest = URLRequest(url: myURL)
+            webView.load(myRequest)
+        }
     }
     
 }

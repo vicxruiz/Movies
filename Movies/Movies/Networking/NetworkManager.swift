@@ -159,7 +159,6 @@ class NetworkManager {
                 completion(nil, error)
             }
         }
-
     }
 }
 
